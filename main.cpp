@@ -30,5 +30,13 @@ int main() {
         return -1;
     }
     glViewport(0, 0, 600, 600);
+
+    // 循环处理
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
+        glfwSwapBuffers(window);
+    }
+    // 释放内存
+    glfwTerminate();
     return 0;
 }
