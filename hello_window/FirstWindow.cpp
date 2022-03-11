@@ -46,6 +46,14 @@ void initGLEW() {
 void loopEvent(GLFWwindow *window) {
     // 循环处理
     while (!glfwWindowShouldClose(window)) {
+
+        // 渲染指令
+        // 设置清空屏幕所用的颜色
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        // 清空屏幕的颜色缓冲
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // 事件检查并交换缓冲区
         glfwPollEvents();
         glfwSwapBuffers(window);
     }
