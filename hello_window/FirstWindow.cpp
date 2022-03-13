@@ -53,6 +53,15 @@ void loopEvent(GLFWwindow *window) {
         // 清空屏幕的颜色缓冲
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // draw angel
+        // 生成 VBO 对象
+        unsigned int VBO;
+        glGenBuffers(1, &VBO);
+        // 将 VBO 绑定到 GL_ARRAY_BUFFER 目标上
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        // 将之前定义的顶点数据复制到缓冲的内存中
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
         // 事件检查并交换缓冲区
         glfwPollEvents();
         glfwSwapBuffers(window);
