@@ -3,6 +3,26 @@
 //
 #include "FirstWindow.h"
 
+float vertices[] = {
+        -0.5f, -0.5f, 0.0f,
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
+};
+
+const char *vertexShaderSource = "#version 330 core\n"
+                                 "layout (location = 0) in vec3 aPos;\n"
+                                 "void main()\n"
+                                 "{\n"
+                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "}\0";
+const char *fragmentShaderSource = "#version 330 core\n"
+                                   "out vec4 FragColor;\n"
+                                   "\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                   "}\0";
+
 void key_call(GLFWwindow *window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         printf("on key ESC pressed");
@@ -43,7 +63,41 @@ void initGLEW() {
     glViewport(0, 0, 600, 600);
 }
 
+unsigned int initShader() {
+
+    // 创建顶点着色器对象
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    // 编译顶点着色器源码
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+
+    // 创建片段着色器对象
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    // 编译片段着色器对象
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    // 创建着色器程序
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    // attach
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    // link 着色器程序
+    glLinkProgram(shaderProgram);
+
+    // 移除顶点着色器对象
+    glDeleteShader(vertexShader);
+    // 移除片段着色器对象
+    glDeleteShader(fragmentShader);
+
+    return shaderProgram;
+}
+
 void loopEvent(GLFWwindow *window) {
+    unsigned int shaderProgram = initShader();
     // 循环处理
     while (!glfwWindowShouldClose(window)) {
 
@@ -61,6 +115,13 @@ void loopEvent(GLFWwindow *window) {
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         // 将之前定义的顶点数据复制到缓冲的内存中
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        // 激活着色器程序
+        glUseProgram(shaderProgram);
+
+        // 声明顶点数据解析方式
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
 
         // 事件检查并交换缓冲区
         glfwPollEvents();

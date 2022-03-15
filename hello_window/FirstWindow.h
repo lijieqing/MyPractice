@@ -11,19 +11,6 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-float vertices[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
-};
-
-const char *vertexShaderSource = "#version 330 core\n"
-                                 "layout (location = 0) in vec3 aPos;\n"
-                                 "void main()\n"
-                                 "{\n"
-                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-                                 "}\0";
-
 void key_call(GLFWwindow *window, int key, int scancode, int action, int mods);
 
 GLFWwindow *windowCreate();
@@ -31,5 +18,7 @@ GLFWwindow *windowCreate();
 void contextInit(GLFWwindow *window);
 
 void initGLEW();
+
+unsigned int initShader();
 
 void loopEvent(GLFWwindow *window);
